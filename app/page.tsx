@@ -1,8 +1,8 @@
 
 export default function Home() {
   return (
-    
-    <h1>Hallo Rolandino</h1>
-    
+
+    <a href="././api/auth/signin">getProfileBasic</a>
+
   );
 }
