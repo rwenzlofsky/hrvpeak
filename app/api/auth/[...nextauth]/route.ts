@@ -5,6 +5,9 @@ import { profile } from "console";
 import { PrismaClient } from '@prisma/client';
 import { getProfileBasic } from '@/app/whoop_api/getProfileBasic'
 import { getCycleCollection } from "@/app/whoop_api/getCycleCollection";
+import { cookies } from "next/headers";
+import { getFreshToken } from "@/app/whoop_api/getNewToken";
+
 
 let myVariable = {}
 
@@ -34,7 +37,7 @@ export const authOptions: AuthOptions = {
       authorization: {
         url: "https://api.prod.whoop.com/oauth/oauth2/auth",
         params: {
-          scope: "read:profile read:workout read:recovery read:cycles read:workout read:body_measurement",
+          scope: "offline read:profile read:workout read:recovery read:cycles read:workout read:body_measurement",
         },
       },
 
@@ -66,12 +69,16 @@ export const authOptions: AuthOptions = {
       // Persist the OAuth access_token to the token right after signin
       if (account) {
         token.accessToken = account.access_token;
+
       }
-      console.log('JWT entered', token.accessToken)
+      console.log('JWT entered', token.accessToken);
 
       if (account) {
-        getProfileBasic(account);
-        getCycleCollection(account);
+
+        cookies().set("hrvpeak_refresh", `${account.refresh_token}`);
+        cookies().set("hrvpeak_access", `${account.access_token}`);
+
+        //getCycleCollection(account);
       }
       return token
 

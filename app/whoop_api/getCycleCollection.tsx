@@ -1,87 +1,90 @@
 import { Account } from "next-auth";
+import { PrismaClient, Prisma } from '@prisma/client'
 
-export async function getCycleCollection(account: Account) {
-
-    let nexttoken: string | undefined = undefined;
-
-    let get_dates = '?start=2023-01-01T00:00:00.000Z&end=2024-01-01T00:00:00.000Z'
+const prisma = new PrismaClient()
 
 
-    let url = encodeURI('https://api.prod.whoop.com/developer/v1/cycle' + get_dates);
+export async function getCycleCollection(token) {
 
+    let acccess_token = String(token);
+    let nexttoken: string | null = null;
+    let get_dates = '?start=2024-01-01T00:00:00.000Z&end=2024-01-15T00:00:00.000Z'
 
-    // await fetch('https://api.prod.whoop.com/developer/v1/cycle' + get_dates, {
-    await fetch(url, {
+    let n: number = 0;
+    let url: string = "";
 
-        method: 'GET',
-        headers: {
-            "Authorization": `Bearer ${account.access_token}`
+    await deleteCycles();
+
+    do {
+        if (n === 0) {
+
+            url = encodeURI('https://api.prod.whoop.com/developer/v1/cycle' + get_dates);
+
         }
-    }
-    )
-        .then(response => response.json())
-        .then(data => {
-            // 'data' is the JavaScript object obtained from the response
-            let myVariable = data;
-            // Now you can use 'myVariable' as needed
-            console.log('*** Cycle ***');
-            console.log('data', data);
-            console.log('next_token', data.next_token);
-            nexttoken = data.next_token;
-        });
+        else {
 
-    let n = 0;
-    while (nexttoken !== undefined) {
-        n = n + 1;
-        let get_dates2 = '&start=2023-01-01T00:00:00.000Z&end=2024-01-01T00:00:00.000Z'
-        let url2 = encodeURI('https://api.prod.whoop.com/developer/v1/cycle?' + nexttoken + get_dates);
+            url = encodeURI('https://api.prod.whoop.com/developer/v1/cycle' + get_dates + '&nextToken=' + nexttoken);
 
-        //        await fetch('https://api.prod.whoop.com/developer/v1/cycle?next_token=' + nexttoken + get_dates2, {
-
-        await fetch(url2, {
+        }
+        const response = await fetch(url, {
 
             method: 'GET',
             headers: {
-                "Authorization": `Bearer ${account.access_token}`
+                "Authorization": `Bearer ${acccess_token}`
             }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Rate Limit = ', response.headers.get("X-RateLimit-Remaining"));
+            console.log('Rate Limit Reset = ', response.headers.get("X-RateLimit-Reset"));
+
+            nexttoken = data.next_token;
+            for (var key in data.records) {
+                createCycle(data.records[key]);
+            }
+
+        } else {
+
+            console.log('Error', response.status, response.statusText);
+            return { error: { status: response.status, statusText: response.statusText } };
+
         }
-        )
-            .then(response => response.json())
-            .then(data => {
-                // 'data' is the JavaScript object obtained from the response
-                let myVariable = data;
-                // Now you can use 'myVariable' as needed
-                console.log('*** Cycle ***');
-                console.log('data', data);
-                console.log('next_token', data.next_token);
-                console.log('n = ', n);
-                nexttoken = data.next_token;
 
-            });
-
-
-
-
-    }
-
+        n = n + 1;
+    } while (nexttoken !== null);
 
 }
-/*
-    "id": 93845,
-"user_id": 10129,
-"created_at": "2022-04-24T11:25:44.774Z",
-"updated_at": "2022-04-24T14:25:44.774Z",
-"start": "2022-04-24T02:25:44.774Z",
-"end": "2022-04-24T10:25:44.774Z",
-"timezone_offset": "-05:00",
-"score_state": "SCORED",
-"score": {
-"strain": 5.2951527,
-"kilojoule": 8288.297,
-"average_heart_rate": 68,
-"max_heart_rate": 141
+
+
+async function deleteCycles() {
+
+    await prisma.cycle.deleteMany({
+
+    });
+
 }
+
+
+async function createCycle(mydata) {
+
+
+    await prisma.cycle.create({
+        data: {
+
+            cycle_id: mydata.id,
+            user_id: mydata.user_id,
+            created_at: mydata.created_at,
+            updated_dt: mydata.updated_at,
+            start: mydata.start,
+            end: mydata.end,
+            timezone_offset: mydata.timezone_offset,
+            score_state: mydata.score_state,
+            strain: mydata.score.strain,
+            kilojoule: mydata.score.kilojoule,
+            average_heart_rate: mydata.score.average_heart_rate,
+            max_heart_rate: mydata.score.max_heart_rate
+        },
+    });
+
 }
-],
-"next_token": "MTIzOjEyMzEyMw"
-}*/

@@ -13,19 +13,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Token {
+  user_id    String   @unique
+  token      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 model User {
-  user_id         Int     @id
+  user_id         Int        @unique
   email           String
   first_name      String
   last_name       String
   height_meter    Decimal
   weight_kilogram Decimal
   max_heart_rate  Int
+  cycles          Cycle[]
+  sleeps          Sleep[]
+  recoveries      Recovery[]
 }
 
 model Cycle {
-  cycle_id           Int
+  cycle_id           Int       @unique
   user_id            Int
+  user               User      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   created_at         DateTime
   updated_dt         DateTime
   start              DateTime
@@ -36,14 +47,16 @@ model Cycle {
   kilojoule          Decimal
   average_heart_rate Int
   max_heart_rate     Int
-
-  @@id([cycle_id, user_id])
+  recovery           Recovery?
 }
 
 model Recovery {
-  cycle_id           Int
+  recovery_id        Int      @unique @default(autoincrement())
+  cycle_id           Int      @unique
+  cycle              Cycle    @relation(fields: [cycle_id], references: [cycle_id], onDelete: Cascade)
   sleep_id           Int
   user_id            Int
+  user               User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   created_at         DateTime
   updated_at         DateTime
   score_state        String
@@ -53,13 +66,13 @@ model Recovery {
   hrv_rmssd_milli    Decimal
   spo2_percentage    Decimal
   skin_temp_celsius  Decimal
-
-  @@id([cycle_id, sleep_id, user_id])
+  sleeps             Sleep[]
 }
 
 model Sleep {
-  sleep_id                                   Int      @id
+  sleep_id                                   Int      @unique
   user_id                                    Int
+  user                                       User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   created_at                                 DateTime
   updated_at                                 DateTime
   start                                      DateTime
@@ -83,4 +96,6 @@ model Sleep {
   sleep_performance_percentage               Int
   sleep_consistency_percentage               Int
   sleep_efficiency_percentage                Decimal
+  recovery_id                                Int
+  recovery                                   Recovery @relation(fields: [recovery_id], references: [recovery_id], onDelete: Cascade)
 }
