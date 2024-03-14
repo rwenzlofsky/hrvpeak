@@ -2,21 +2,25 @@
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button"
 import Link from "next/link"
-import { getFreshToken } from "./whoop_api/getNewToken";
+import { getFreshTokens } from "./whoop_api/refreshTokens";
 import { cookies } from "next/headers";
 import { getCycleCollection } from "./whoop_api/getCycleCollection";
+import { getSession } from "next-auth/react"
+import { getToken } from 'next-auth/jwt';
 
 
 
 export default function Home() {
 
 
-  const handleDelete = async (data: FormData) => {
-    "use server";
+
+  const handleRefreshToken = async (data: FormData) => {
+    'use server'
     //const itemId = data.get("itemId");
 
-    await getFreshToken(cookies().get("hrvpeak_refresh").value);
-
+    const token = await getToken({ req })
+    console.log("JSON Web Token", token)
+    res.end()
     // API call to delete an item
   };
 
@@ -25,11 +29,7 @@ export default function Home() {
     "use server";
     //const itemId = data.get("itemId");
     await getCycleCollection(cookies().get("hrvpeak_access").value);
-
-
-    // API call to delete an item
   };
-
 
 
   return (
@@ -40,12 +40,13 @@ export default function Home() {
         </Button>
 
         <form action={handleCycleCollection}>
-          <input name="cycleId" className="hidden" value="1" />
+          <input name="cycleId" className="hidden" defaultValue="" />
           <button type="submit">Cycles</button>
         </form>
 
-        <form action={handleDelete}>
-          <input name="itemId" className="hidden" value="1" />
+        <form action={handleRefreshToken} >
+
+          <input name="itemId" className="hidden" defaultValue="" />
           <button type="submit">Refresh</button>
         </form>
 

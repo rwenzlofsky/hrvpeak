@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { getFreshToken } from "./getNewToken";
+import { getFreshToken } from "./refreshTokens";
 
 export async function getRefreshCookie() {
 
