@@ -75,7 +75,7 @@ model WhoopUser {
   max_heart_rate  Int
 }
 
-model WhhopCycle {
+model WhoopCycle {
   cycle_id           Int
   user_id            Int
   created_at         DateTime

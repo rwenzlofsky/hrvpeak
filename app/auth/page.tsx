@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
 import { Key, Mail, Router } from "lucide-react";
 import SigninWithGoogle from "@/app/components/SigninWithGoogle"
+import SigninWithWhoop from "@/app/components/SigninWithWhoop"
 import { getServerSession } from "next-auth";
 import { authOptions } from "../utils/auth";
 import { redirect } from 'next/navigation'
@@ -32,6 +33,7 @@ export default async function AuthRoute() {
                         </div>
                         <Button className="mt-4">Login with E-Mail<Mail className="ml-4" /></Button>
                         <SigninWithGoogle />
+                        <SigninWithWhoop />
                     </div>
                 </CardContent>
             </Card>
