@@ -13,14 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Token {
+model WhoopToken {
   user_id       Int      @id
   created_at    DateTime @default(now())
   access_token  String
   refresh_token String
 }
 
-model User {
+model WhoopUser {
   user_id         Int     @id
   email           String
   first_name      String
@@ -30,7 +30,7 @@ model User {
   max_heart_rate  Int
 }
 
-model Cycle {
+model WhhopCycle {
   cycle_id           Int
   user_id            Int
   created_at         DateTime
@@ -47,7 +47,7 @@ model Cycle {
   @@id([cycle_id, user_id])
 }
 
-model Recovery {
+model WhoopRecovery {
   cycle_id           Int
   sleep_id           Int
   user_id            Int
@@ -64,7 +64,7 @@ model Recovery {
   @@id([cycle_id, sleep_id, user_id])
 }
 
-model Sleep {
+model WhoopSleep {
   sleep_id                                   Int      @id
   user_id                                    Int
   created_at                                 DateTime
