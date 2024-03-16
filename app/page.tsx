@@ -10,33 +10,39 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger,
     NavigationMenuViewport,
-  } from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu"
 
-  import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
+import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-  
+
 
 
 export default async function Home() {
     const session = await getServerSession(authOptions);
     return (
 
-<>
-            
+        <>
 
-        <div>
-            
 
-            {session ? (
-                <div>
-                    <h1>You are logged in</h1>
-                    <LogoutButton />
-                </div>
-            ) : (
-                <h1>Please log in</h1>
+            <div>
 
-            )}
-        </div>
+
+                {session ? (
+                    <div>
+                        <h1>You are logged in</h1>
+                        <LogoutButton />
+                    </div>
+                ) : (
+                    <div>
+                        <h1>Please log in</h1>
+                        <Button asChild>
+                            <Link href="/auth">Login</Link>
+                        </Button>
+                    </div>
+                )}
+            </div >
         </>
     )
 

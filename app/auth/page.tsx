@@ -8,6 +8,7 @@ import SigninWithWhoop from "@/app/components/SigninWithWhoop"
 import { getServerSession } from "next-auth";
 import { authOptions } from "../utils/auth";
 import { redirect } from 'next/navigation'
+import SigninForm from "../components/SigninForm";
 
 export default async function AuthRoute() {
     const session = await getServerSession(authOptions);
@@ -26,12 +27,7 @@ export default async function AuthRoute() {
                 </CardHeader>
                 <CardContent>
                     <div className="flex flex-col">
-                        <div className="flex flex-col gap-y-2">
-                            <Label>E-Mail</Label>
-                            <Input name="email" type="email" placeholder="Please insert your email..."></Input>
-
-                        </div>
-                        <Button className="mt-4">Login with E-Mail<Mail className="ml-4" /></Button>
+                        <SigninForm />
                         <SigninWithGoogle />
                     </div>
                 </CardContent>
