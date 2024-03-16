@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "./utils/auth"
+import LogoutButton from "./components/LogoutButton";
 
 
 export default async function Home() {
@@ -10,8 +11,10 @@ export default async function Home() {
 
             <h1>This is a public route</h1>
             {session ? (
-                <h1>You are logged in</h1>
-
+                <div>
+                    <h1>You are logged in</h1>
+                    <LogoutButton />
+                </div>
             ) : (
                 <h1>Please log in</h1>
 
