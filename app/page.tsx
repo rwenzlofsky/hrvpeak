@@ -1,15 +1,32 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "./utils/auth"
 import LogoutButton from "./components/LogoutButton";
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuIndicator,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+    NavigationMenuViewport,
+  } from "@/components/ui/navigation-menu"
+
+  import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
+
+  
 
 
 export default async function Home() {
     const session = await getServerSession(authOptions);
     return (
 
-        <div className="p-10">
+<>
+            
 
-            <h1>This is a public route</h1>
+        <div>
+            
+
             {session ? (
                 <div>
                     <h1>You are logged in</h1>
@@ -20,6 +37,7 @@ export default async function Home() {
 
             )}
         </div>
+        </>
     )
 
 };
