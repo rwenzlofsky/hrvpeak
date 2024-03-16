@@ -1,7 +1,6 @@
 //import { getFreshTokens } from "@/app/whoop_api/refreshTokens";
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { AuthOptions, NextAuthOptions } from "next-auth";
 import { authOptions } from "@/app/utils/auth"
-
 
 const handler = NextAuth(authOptions);
 
