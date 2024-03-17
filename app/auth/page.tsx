@@ -15,7 +15,7 @@ export default async function AuthRoute() {
 
     if (session) {
 
-        return redirect('/')
+        return redirect('/whoop_connect')
     }
 
     return (

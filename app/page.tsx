@@ -1,21 +1,20 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "./utils/auth"
-import LogoutButton from "./components/LogoutButton";
+
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import * as React from "react"
+
 import {
     NavigationMenu,
     NavigationMenuContent,
-    NavigationMenuIndicator,
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
     NavigationMenuTrigger,
-    NavigationMenuViewport,
+    navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-
-import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-
+import LogoutButton from "./components/LogoutButton";
 
 
 
@@ -32,6 +31,7 @@ export default async function Home() {
                 {session ? (
                     <div>
                         <h1>You are logged in</h1>
+
                         <LogoutButton />
                     </div>
                 ) : (
@@ -42,7 +42,12 @@ export default async function Home() {
                         </Button>
                     </div>
                 )}
+
+
+
             </div >
+
+
         </>
     )
 
