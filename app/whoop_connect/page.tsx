@@ -21,7 +21,7 @@ const navigation = [
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
     { name: 'Settings', href: '#' },
-    { name: 'Sign out', href: '/signout' },
+    { name: 'Sign out', href: '#' },
 ]
 
 function classNames(...classes) {
@@ -176,7 +176,7 @@ export default function Example() {
                                     <div className="mt-3 space-y-1 px-2">
 
                                         {userNavigation.map((item) => (
-                                            <Disclosure.Button
+                                            <Disclosure.Button onClick={() = }
                                                 key={item.name}
                                                 as="a"
                                                 href={item.href}
