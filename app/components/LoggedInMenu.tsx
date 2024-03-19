@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { getSession, signIn, signOut } from "next-auth/react"
+import { signOut } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
@@ -18,7 +18,32 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-import { redirect } from "next/navigation"
+
+
+
+
+const userprofile: { title: string; href: string; description: string }[] = [
+    {
+        title: "View Profile",
+        href: "/",
+        description:
+            "View and Edt your user profile.",
+    },
+    {
+        title: "My Account",
+        href: "/",
+        description:
+            "Chnage account setting and connect your Whoop.",
+    },
+    {
+        title: "Settings",
+        href: "/",
+        description:
+            "General Settings.",
+    },
+
+]
+
 
 const components: { title: string; href: string; description: string }[] = [
     {
@@ -60,107 +85,134 @@ const components: { title: string; href: string; description: string }[] = [
 
 
 
-export function LoggedInMenu() {
-
-    const UserProfile = () => {
-        const { user, error, isLoading } = useUser();
+export async function LoggedInMenu({ children }) {
 
 
-        return (
-            <>
-                <nav>
-                    <NavigationMenu>
-                        <NavigationMenuList>
-                            <NavigationMenuItem>
-                                <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-                                <NavigationMenuContent>
-                                    <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                                        <li className="row-span-3">
-                                            <NavigationMenuLink asChild>
-                                                <a
-                                                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                                                    href="/"
-                                                >
-                                                    <Icons.logo className="h-6 w-6" />
-                                                    <div className="mb-2 mt-4 text-lg font-medium">
-                                                        shadcn/ui
-                                                    </div>
-                                                    <p className="text-sm leading-tight text-muted-foreground">
-                                                        Beautifully designed components built with Radix UI and
-                                                        Tailwind CSS.
-                                                    </p>
-                                                </a>
-                                            </NavigationMenuLink>
-                                        </li>
-                                        <ListItem href="/docs" title="Introduction">
-                                            Re-usable components built using Radix UI and Tailwind CSS.
-                                        </ListItem>
-                                        <ListItem href="/docs/installation" title="Installation">
-                                            How to install dependencies and structure your app.
-                                        </ListItem>
-                                        <ListItem href="/docs/primitives/typography" title="Typography">
-                                            Styles for headings, paragraphs, lists...etc
-                                        </ListItem>
-                                    </ul>
-                                </NavigationMenuContent>
-                            </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-                                <NavigationMenuContent>
-                                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                                        {components.map((component) => (
-                                            <ListItem
-                                                key={component.title}
-                                                title={component.title}
-                                                href={component.href}
+    return (
+        <>
+            <nav>
+                <NavigationMenu>
+                    <NavigationMenuList>
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                                    <li className="row-span-3">
+                                        <NavigationMenuLink asChild>
+                                            <a
+                                                className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                                                href="/"
                                             >
-                                                {component.description}
-                                            </ListItem>
-                                        ))}
-                                    </ul>
-                                </NavigationMenuContent>
-                            </NavigationMenuItem>
+                                                <Icons.logo className="h-6 w-6" />
+                                                <div className="mb-2 mt-4 text-lg font-medium">
+                                                    shadcn/ui
 
-                            <NavigationMenuItem>
+                                                </div>
+                                                <p className="text-sm leading-tight text-muted-foreground">
+                                                    Beautifully designed components built with Radix UI and
+                                                    Tailwind CSS.
+                                                </p>
+                                            </a>
+                                        </NavigationMenuLink>
+                                    </li>
+                                    <ListItem href="/docs" title="Introduction">
+                                        Re-usable components built using Radix UI and Tailwind CSS.
+                                    </ListItem>
+                                    <ListItem href="/docs/installation" title="Installation">
+                                        How to install dependencies
+
+                                    </ListItem>
+                                    <ListItem href="/docs/primitives/typography" title="Typography">
+                                        Styles for headings, paragraphs, lists...etc
+                                    </ListItem>
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                                    {components.map((component) => (
+                                        <ListItem
+                                            key={component.title}
+                                            title={component.title}
+                                            href={component.href}
+                                        >
+                                            {component.description}
+                                        </ListItem>
+                                    ))}
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+
+                        <NavigationMenuItem>
+                            <Link href="/whoop_auth" legacyBehavior passHref>
+                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                    Connect Whoop
+                                </NavigationMenuLink>
+                            </Link>
+                        </NavigationMenuItem>
+
+                        <NavigationMenuItem>
 
 
-                                <Button variant="ghost" onClick={() => signOut({ callbackUrl: '/' })
-                                }>Logout</Button>
+                        </NavigationMenuItem>
+
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>User</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="object-center grid w-[400px] gap-1 p-4 md:w-[500px] md:grid-cols-1 lg:w-[400px]">
+                                    <h2>User:</h2> {children}
+                                    {userprofile.map((userprofile) => (
+                                        <ListItem
+                                            key={userprofile.title}
+                                            title={userprofile.title}
+                                            href={userprofile.href}
+                                        >
+                                            {userprofile.description}
+                                        </ListItem>
+                                    ))}
+                                    <Button variant="ghost" onClick={() => signOut({ callbackUrl: '/' })}>Signout</Button>
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
 
 
-                            </NavigationMenuItem>
-                        </NavigationMenuList>
-                    </NavigationMenu >
+
+
+                    </NavigationMenuList>
+                </NavigationMenu >
 
 
 
-                </nav>
-            </>
-        )
-    }
+            </nav>
+        </>
+    )
+}
 
-    const ListItem = React.forwardRef<
-        React.ElementRef<"a">,
-        React.ComponentPropsWithoutRef<"a">
-    >(({ className, title, children, ...props }, ref) => {
-        return (
-            <li>
-                <NavigationMenuLink asChild>
-                    <a
-                        ref={ref}
-                        className={cn(
-                            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                            className
-                        )}
-                        {...props}
-                    >
-                        <div className="text-sm font-medium leading-none">{title}</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            {children}
-                        </p>
-                    </a>
-                </NavigationMenuLink>
-            </li>
-        )
-    })
-    ListItem.displayName = "ListItem"
+const ListItem = React.forwardRef<
+    React.ElementRef<"a">,
+    React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+    return (
+        <li>
+            <NavigationMenuLink asChild>
+                <a
+                    ref={ref}
+                    className={cn(
+                        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                        className
+                    )}
+                    {...props}
+                >
+                    <div className="text-sm font-medium leading-none">{title}</div>
+                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                        {children}
+                    </p>
+                </a>
+            </NavigationMenuLink>
+        </li>
+    )
+})
+ListItem.displayName = "ListItem"

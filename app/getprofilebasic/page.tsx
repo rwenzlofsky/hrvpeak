@@ -1,15 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { buttonVariants } from "@/components/ui/button"
-import Link from "next/link"
 
-export function alert() {
-
-  console.log("ALERT");
-
-
-}
 
 
 export default function GetProfile() {
@@ -21,5 +13,5 @@ export default function GetProfile() {
         </Button>
       </main >
     </>
-  );
+  )
 }

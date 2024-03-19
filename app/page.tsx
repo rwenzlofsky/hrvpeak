@@ -1,21 +1,23 @@
-import { Session, getServerSession } from "next-auth"
+import { getServerSession } from "next-auth"
 import { authOptions } from "./utils/auth"
 import * as React from "react"
 import { NavMenu } from "@/app/components/NavMenu"
 import { LoggedInMenu } from "@/app/components/LoggedInMenu"
+import GetSession from "@/app/getsessioninfo/page"
 
 
 
 
 export default async function Home() {
-    const session = await getServerSession(authOptions);
+    const mysession = await getServerSession(authOptions);
 
     let menu;
 
-    if (!session) {
+    if (!mysession) {
         menu = <NavMenu />
     } else {
-        menu = <LoggedInMenu />
+        console.log("Session choosing LoggedinMenu");
+        menu = <LoggedInMenu> <GetSession /> </LoggedInMenu>
 
     }
     return (
