@@ -8,7 +8,7 @@ export default function SigninWithGoogle() {
     <Button
       onClick={() =>
         signIn("google", {
-          callbackUrl: "https://hrvpeak.com",
+          callbackUrl: "/",
         })
       }
       className="mt-4"

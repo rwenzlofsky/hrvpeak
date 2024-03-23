@@ -5,14 +5,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Key, Mail, Router } from "lucide-react";
 import SigninWithWhoop from "@/app/components/SigninWithWhoop";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../utils/auth";
 import { redirect } from "next/navigation";
+import prisma from "../utils/db";
 
 export default async function AuthWhoop() {
   const session = await getServerSession(authOptions);
@@ -20,6 +17,9 @@ export default async function AuthWhoop() {
   if (!session) {
     return redirect("/auth");
   }
+
+  const result =
+    await prisma.$queryRaw`DELETE FROM hrvpeak.public."Account" WHERE provider = 'whoop'`;
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">

@@ -74,6 +74,7 @@ export const authOptions = {
       // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
+
     },
     async session({
       session,
@@ -84,6 +85,7 @@ export const authOptions = {
     }): Promise<Session> {
       console.log("Callback Session , Profile", session);
       console.log("Callback Session , User", user);
+      session.user.userid = user.id;
       
       return session;
     },

@@ -1,16 +1,22 @@
-'use client'
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 
 export default function SigninWithWhoop() {
-
-    return (
-        <Button onClick={() => signIn('whoop', {
-            callbackUrl: "https://hrvpeak.com"
-        }
-        )} className="mt-4" variant="secondary">Connect with Whoop</Button>
-    )
-
-
+  "use client";
+  console.log("Whoop Button clicked");
+  return (
+    <Button
+      variant="default"
+      className="min-w-48"
+      onClick={() =>
+        signIn("whoop", {
+          callbackUrl: "/myaccount",
+        })
+      }
+    >
+      Connect with Whoop
+    </Button>
+  );
 }
