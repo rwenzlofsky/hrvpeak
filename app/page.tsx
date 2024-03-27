@@ -1,11 +1,34 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "./utils/auth";
 import * as React from "react";
-import { NavMenu } from "@/app/components/NavMenu";
 import { LoggedInMenu } from "@/app/components/LoggedInMenu";
+import { LoggedOutMenu } from "@/app/components/LoggedOutMenu";
+
 
 import GetSession from "@/app/getsessioninfo/page";
 
 export default async function Home() {
-  return <h1>Home</h1>;
+
+  const session = await getServerSession(authOptions);
+  let menu;
+
+
+  if (!session) {
+    menu = <LoggedOutMenu />
+  }
+  else {
+    menu = <LoggedInMenu />
+
+  }
+
+  return (
+    <div className="justify-items-center">{menu}</div>
+    
+    
+    )
+
+
+
+
+  
 }

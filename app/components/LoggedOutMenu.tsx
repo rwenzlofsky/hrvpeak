@@ -74,9 +74,9 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
-export async function LoggedInMenu() {
+export async function LoggedOutMenu() {
   return (
-<div className='container h-100 ml-20' >
+    <div className='ml-80 bg-slate-400' >
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
@@ -127,30 +127,25 @@ export async function LoggedInMenu() {
                 >
                   {userprofile.description}
                 </ListItem>
-                
               ))}
-              <div className='container h-100 ml-20' >
-
-                 <Button
-                variant="ghost"
-                onClick={() => signOut({ callbackUrl: "/" })}
-              >
-                Signout
-              </Button>
-              </div>
                       </ul>
-                   
           </NavigationMenuContent>
         </NavigationMenuItem>
-        
+        <div className='container justify-right bg-slate-300' >
+
+        <Link href="/auth" legacyBehavior passHref>
+                      Signin
+        </Link>
+            </div>
 
       </NavigationMenuList>
     </NavigationMenu>
     </div>
+
   );
 }
 
-const ListItem = React.forwardRef<  
+const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
