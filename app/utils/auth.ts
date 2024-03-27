@@ -43,6 +43,13 @@ export const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        },
+      },
     }),
     EmailProvider({
       server: {
@@ -57,7 +64,7 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }: {user: User, account: Account, profile: Profile }) {
+    async signIn({ user, account, profile }: { user: User, account: Account, profile: Profile }) {
       console.log("Callback signIn, Profile", profile);
       console.log("Callback signIn, User", user);
       console.log("Callback signIn, Account", account);
@@ -65,7 +72,7 @@ export const authOptions = {
 
       return true;
     },
-    async redirect({ url, baseUrl }: {url: string, baseUrl: string}) {
+    async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
       console.log("Callback Redirect", url);
       console.log("Callback Redirect", baseUrl);
 
@@ -86,7 +93,7 @@ export const authOptions = {
       console.log("Callback Session , Profile", session);
       console.log("Callback Session , User", user);
       session.user.userid = user.id;
-      
+
       return session;
     },
   },

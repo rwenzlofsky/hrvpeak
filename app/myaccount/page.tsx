@@ -26,8 +26,8 @@ export default async function MyAccount() {
     <main>
       <h1 className="ml-10 mt-5 mb-3 font-bold">My account</h1>
       <h2 className="ml-10">
-        You are logged in as {session?.user?.userid} xx{" "}
-        {result[0]?.providerAccountId}
+        You are logged in as {session?.user?.email} xx{" "}
+        Whoop Account: {result[0].providerAccountId}
       </h2>
 
       <Card className="min-w-fit ml-10 mr-10 mt-7 mb-10">
