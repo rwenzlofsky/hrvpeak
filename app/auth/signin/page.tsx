@@ -6,17 +6,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import SigninWithGoogle from "@/app/components/SigninWithGoogle";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../utils/auth";
-import SigninForm from "../components/SigninForm";
+import SigninForm from "../../components/SigninForm";
 
-export default async function AuthRoute() {
-  const session = await getServerSession(authOptions);
-
-  /*if (session) {
-    return;
-  }*/
-
+export default async function SignIn() {
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <Card>

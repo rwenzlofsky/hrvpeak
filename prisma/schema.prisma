@@ -59,10 +59,11 @@ model VerificationToken {
 }
 
 model WhoopToken {
-  user_id       Int      @id
-  created_at    DateTime @default(now())
-  access_token  String
-  refresh_token String
+  user_id         Int      @id
+  created_at      DateTime @default(now())
+  access_token    String
+  refresh_token   String
+  hrvpeak_user_id String
 }
 
 model WhoopUser {
@@ -73,6 +74,7 @@ model WhoopUser {
   height_meter    Decimal
   weight_kilogram Decimal
   max_heart_rate  Int
+  hrvpeak_user_id String
 }
 
 model WhoopCycle {
@@ -88,6 +90,7 @@ model WhoopCycle {
   kilojoule          Decimal
   average_heart_rate Int
   max_heart_rate     Int
+  hrvpeak_user_id    String
 
   @@id([cycle_id, user_id])
 }
@@ -105,6 +108,7 @@ model WhoopRecovery {
   hrv_rmssd_milli    Decimal
   spo2_percentage    Decimal
   skin_temp_celsius  Decimal
+  hrvpeak_user_id    String
 
   @@id([cycle_id, sleep_id, user_id])
 }
@@ -120,8 +124,8 @@ model WhoopSleep {
   nap                                        Boolean
   score_state                                String
   total_in_bed_time_milli                    Int
-  awake_time_milli                           Int
-  no_data_time_milli                         Int
+  total_awake_time_milli                     Int
+  total_no_data_time_milli                   Int
   total_light_sleep_time_milli               Int
   total_slow_wave_sleep_time_milli           Int
   total_rem_sleep_time_milli                 Int
@@ -135,4 +139,32 @@ model WhoopSleep {
   sleep_performance_percentage               Int
   sleep_consistency_percentage               Int
   sleep_efficiency_percentage                Decimal
+  hrvpeak_user_id                            String
+}
+
+model WhoopWorkout {
+  workout_id                   Int      @id
+  user_id                      Int
+  created_at                   DateTime
+  updated_at                   DateTime
+  start                        DateTime
+  end                          DateTime
+  timezone_offset              String
+  sport_id                     Int
+  score_state                  String
+  score_strain                 Decimal
+  score_average_heart_rate     Int
+  score_max_heart_rate         Int
+  score_kilojoule              Decimal
+  score_percent_recorded       Int
+  score_distance_meter         Decimal
+  score_altitude_gain_meter    Decimal
+  score__altitude_change_meter Decimal
+  zone_zero_milli              Int
+  zone_one_milli               Int
+  zone_two_milli               Int
+  zone_three_milli             Int
+  zone_four_mill               Int
+  zone_five_milli              Int
+  hrvpeak_user_id              String
 }

@@ -7,7 +7,7 @@ const session = await getServerSession(authOptions);
 
 let hrvpeak_user_id = session?.userid;
 
-export async function getCycleCollection() {
+export async function getRecoveryCollection() {
   console.log("Session User Id", hrvpeak_user_id);
 
   const access_token = await prisma.account.findFirst({
@@ -26,16 +26,16 @@ export async function getCycleCollection() {
   let n: number = 0;
   let url: string = "";
 
-  await deleteCycles();
+  await deleteRecoveries();
 
   do {
     if (n === 0) {
       url = encodeURI(
-        "https://api.prod.whoop.com/developer/v1/cycle" + get_dates
+        "https://api.prod.whoop.com/developer/v1/recovery" + get_dates
       );
     } else {
       url = encodeURI(
-        "https://api.prod.whoop.com/developer/v1/cycle" +
+        "https://api.prod.whoop.com/developer/v1/recovery" +
           get_dates +
           "&nextToken=" +
           nexttoken
@@ -61,7 +61,8 @@ export async function getCycleCollection() {
 
       nexttoken = data.next_token;
       for (var key in data.records) {
-        createCycle(data.records[key]);
+        createRecovery(data.records[key]);
+        console.log(data.records[key]);
       }
     } else {
       console.log("Error", response.status, response.statusText);
@@ -74,25 +75,25 @@ export async function getCycleCollection() {
   } while (nexttoken !== null);
 }
 
-async function deleteCycles() {
-  await prisma.whoopCycle.deleteMany({});
+async function deleteRecoveries() {
+  await prisma.whoopRecovery.deleteMany({});
 }
 
-async function createCycle(mydata) {
-  await prisma.whoopCycle.create({
+async function createRecovery(mydata) {
+  await prisma.whoopRecovery.create({
     data: {
-      cycle_id: mydata.id,
+      cycle_id: mydata.cycle_id,
+      sleep_id: mydata.sleep_id,
       user_id: mydata.user_id,
       created_at: mydata.created_at,
-      updated_dt: mydata.updated_at,
-      start: mydata.start,
-      end: mydata.end,
-      timezone_offset: mydata.timezone_offset,
+      updated_at: mydata.updated_at,
       score_state: mydata.score_state,
-      strain: mydata.score.strain,
-      kilojoule: mydata.score.kilojoule,
-      average_heart_rate: mydata.score.average_heart_rate,
-      max_heart_rate: mydata.score.max_heart_rate,
+      user_calibrating: mydata.score.user_calibrating,
+      recovery_score: mydata.score.recovery_score,
+      resting_heart_rate: mydata.score.resting_heart_rate,
+      hrv_rmssd_milli: mydata.score.hrv_rmssd_milli,
+      spo2_percentage: mydata.score.spo2_percentage,
+      skin_temp_celsius: mydata.score.skin_temp_celsius,
       hrvpeak_user_id: hrvpeak_user_id,
     },
   });

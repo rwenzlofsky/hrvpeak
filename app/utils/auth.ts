@@ -24,7 +24,7 @@ export const authOptions = {
         url: process.env.WHOOP_AUTH_URL,
         params: {
           scope:
-            "offline read:profile read:workout read:recovery read:cycles read:workout read:body_measurement",
+            "offline read:profile read:workout read:recovery read:cycles read:workout read:body_measurement read:sleep",
         },
       },
 
@@ -85,15 +85,18 @@ export const authOptions = {
     },
     async session({
       session,
-      user,
+      user
+      
     }: {
       session: Session;
       user: User;
+      
     }): Promise<Session> {
-      console.log("Callback Session , Profile", session);
-      console.log("Callback Session , User", user);
-      session.user.userid = user.id;
 
+      session.userid = user.id;
+      session.user = user.email;
+      console.log("Callback Session , Session", session);
+      console.log("Callback Session , User", user);
       return session;
     },
   },

@@ -76,81 +76,77 @@ const components: { title: string; href: string; description: string }[] = [
 
 export async function LoggedInMenu() {
   return (
-<div className='container h-100 ml-20' >
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <ListItem href="/docs" title="Introduction">
-                Re-usable components built using Radix UI and Tailwind CSS.
-              </ListItem>
-              <ListItem href="/docs/installation" title="Installation">
-                How to install dependencies
-              </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc s{" "}
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {components.map((component) => (
-                <ListItem
-                  key={component.title}
-                  title={component.title}
-                  href={component.href}
-                >
-                  {component.description}
+    <div className="container h-100 ml-20">
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                <ListItem href="/docs" title="Introduction">
+                  Re-usable components built using Radix UI and Tailwind CSS.
                 </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem></NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>User</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="object-center grid w-[400px] gap-1 p-4 md:w-[500px] md:grid-cols-1 lg:w-[400px]">
-              {userprofile.map((userprofile) => (
-                <ListItem
-                  key={userprofile.title}
-                  title={userprofile.title}
-                  href={userprofile.href}
-                >
-                  {userprofile.description}
+                <ListItem href="/docs/installation" title="Installation">
+                  How to install dependencies
                 </ListItem>
-                
-              ))}
-              <div className='container h-100 ml-20' >
+                <ListItem href="/docs/primitives/typography" title="Typography">
+                  Styles for headings, paragraphs, lists...etc s{" "}
+                </ListItem>
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
 
-                 <Button
-                variant="ghost"
-                onClick={() => signOut({ callbackUrl: "/" })}
-              >
-                Signout
-              </Button>
-              </div>
-                      </ul>
-                   
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                {components.map((component) => (
+                  <ListItem
+                    key={component.title}
+                    title={component.title}
+                    href={component.href}
+                  >
+                    {component.description}
+                  </ListItem>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
 
-      </NavigationMenuList>
-    </NavigationMenu>
+          <NavigationMenuItem></NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>User</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="object-center grid w-[400px] gap-1 p-4 md:w-[500px] md:grid-cols-1 lg:w-[400px]">
+                {userprofile.map((userprofile) => (
+                  <ListItem
+                    key={userprofile.title}
+                    title={userprofile.title}
+                    href={userprofile.href}
+                  >
+                    {userprofile.description}
+                  </ListItem>
+                ))}
+                <div className="container justify-right bg-slate-300">
+                  <Button
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="mt-4"
+                    variant="secondary"
+                  >
+                    Signout
+                  </Button>
+                </div>{" "}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
     </div>
   );
 }
 
-const ListItem = React.forwardRef<  
+const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {

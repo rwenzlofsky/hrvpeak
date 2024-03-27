@@ -2,6 +2,9 @@ import React from "react";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../utils/auth";
 import Link from "next/link";
+import RefreshWhoopData from "@/app/components/RefreshWhoopData";
+import { isEmpty } from "@/lib/utils";
+import SigninWithWhoop from "@/app/components/SigninWithWhoop";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,17 +20,21 @@ import prisma from "../utils/db";
 export default async function MyAccount() {
   const session = await getServerSession(authOptions);
 
-  let userid = session?.user?.userid;
-  const result =
+  let userid = session?.userid;
+
+  const result: [] =
     await prisma.$queryRaw`SELECT "providerAccountId" FROM hrvpeak.public."Account" WHERE provider = 'whoop'`;
   console.log("SQL = ", result);
+
+  let whoop_account: string = isEmpty(result)
+    ? "Connect Whoop"
+    : "Reconnect Whoop " + result[0].providerAccountId;
 
   return (
     <main>
       <h1 className="ml-10 mt-5 mb-3 font-bold">My account</h1>
       <h2 className="ml-10">
-        You are logged in as {session?.user?.email} xx{" "}
-        Whoop Account: {result[0].providerAccountId}
+        <p>You are logged in as {session?.user}</p>
       </h2>
 
       <Card className="min-w-fit ml-10 mr-10 mt-7 mb-10">
@@ -43,14 +50,10 @@ export default async function MyAccount() {
                 Reconnect my WHOOP account
               </p>
               <p className="text-sm text-muted-foreground">
-                Reconnecting your account if you lost the connection. xx
+                Reconnecting your account if you lost the connection.
               </p>
               <div>
-                <Button variant="default" className="min-w-48">
-                  <Link href="/whoop_auth" legacyBehavior passHref>
-                    Whoop Signin
-                  </Link>
-                </Button>
+                <SigninWithWhoop account={whoop_account} />
               </div>
             </div>
           </div>
@@ -64,9 +67,11 @@ export default async function MyAccount() {
               <p className="text-sm text-muted-foreground">
                 Refresh all data available in your whoop account.
               </p>
-              <div>
-                <Button variant="default" className="min-w-48">
-                  Refresh
+              <div className="container justify-left">
+                <Button variant="destructive" className="min-w-72">
+                  <Link href="/getwhoopdata" legacyBehavior passHref>
+                    Refresh WHoop Data
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -82,7 +87,7 @@ export default async function MyAccount() {
                 This will delete your account from our service.
               </p>
               <div>
-                <Button variant="destructive" className="min-w-48">
+                <Button variant="destructive" className="min-w-72">
                   Delete Account
                 </Button>
               </div>

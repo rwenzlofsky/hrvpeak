@@ -7,7 +7,7 @@ const session = await getServerSession(authOptions);
 
 let hrvpeak_user_id = session?.userid;
 
-export async function getCycleCollection() {
+export async function getWorkoutCollection() {
   console.log("Session User Id", hrvpeak_user_id);
 
   const access_token = await prisma.account.findFirst({
@@ -26,16 +26,16 @@ export async function getCycleCollection() {
   let n: number = 0;
   let url: string = "";
 
-  await deleteCycles();
+  await deleteWorkouts();
 
   do {
     if (n === 0) {
       url = encodeURI(
-        "https://api.prod.whoop.com/developer/v1/cycle" + get_dates
+        "https://api.prod.whoop.com/developer/v1/activity/workout" + get_dates
       );
     } else {
       url = encodeURI(
-        "https://api.prod.whoop.com/developer/v1/cycle" +
+        "https://api.prod.whoop.com/developer/v1/activity/workout" +
           get_dates +
           "&nextToken=" +
           nexttoken
@@ -61,7 +61,8 @@ export async function getCycleCollection() {
 
       nexttoken = data.next_token;
       for (var key in data.records) {
-        createCycle(data.records[key]);
+        createWorkout(data.records[key]);
+        console.log(data.records[key]);
       }
     } else {
       console.log("Error", response.status, response.statusText);
@@ -74,25 +75,36 @@ export async function getCycleCollection() {
   } while (nexttoken !== null);
 }
 
-async function deleteCycles() {
-  await prisma.whoopCycle.deleteMany({});
+async function deleteWorkouts() {
+  await prisma.whoopWorkout.deleteMany({});
 }
 
-async function createCycle(mydata) {
-  await prisma.whoopCycle.create({
+async function createWorkout(mydata) {
+  await prisma.whoopWorkout.create({
     data: {
-      cycle_id: mydata.id,
+      workout_id: mydata.id,
       user_id: mydata.user_id,
       created_at: mydata.created_at,
-      updated_dt: mydata.updated_at,
+      updated_at: mydata.updated_at,
       start: mydata.start,
       end: mydata.end,
       timezone_offset: mydata.timezone_offset,
+      sport_id: mydata.sport_id,
       score_state: mydata.score_state,
-      strain: mydata.score.strain,
-      kilojoule: mydata.score.kilojoule,
-      average_heart_rate: mydata.score.average_heart_rate,
-      max_heart_rate: mydata.score.max_heart_rate,
+      score_strain: mydata.score.strain,
+      score_average_heart_rate: mydata.score.average_heart_rate,
+      score_max_heart_rate: mydata.score.max_heart_rate,
+      score_kilojoule: mydata.score.kilojoule,
+      score_percent_recorded: mydata.score.percent_recorded,
+      score_distance_meter: mydata.score.distance_meter,
+      score_altitude_gain_meter: mydata.score.altitude_gain_meter,
+      score__altitude_change_meter: mydata.score.altitude_change_meter,
+      zone_zero_milli: mydata.score.zone_duration.zone_zero_milli,
+      zone_one_milli: mydata.score.zone_duration.zone_one_milli,
+      zone_two_milli: mydata.score.zone_duration.zone_two_milli,
+      zone_three_milli: mydata.score.zone_duration.zone_three_milli,
+      zone_four_mill: mydata.score.zone_duration.zone_four_milli,
+      zone_five_milli: mydata.score.zone_duration.zone_five_milli,
       hrvpeak_user_id: hrvpeak_user_id,
     },
   });
